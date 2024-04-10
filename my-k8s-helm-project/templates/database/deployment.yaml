@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.database_var.name }}
+spec:
+  serviceName: {{ .Values.database_var.serviceName }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.database_var.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.database_var.app }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ .Values.database_var.nodegroupKey }}
+                operator: In
+                values:
+                - {{ .Values.database_var.nodegroupValues }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      containers:
+        - name: {{ .Values.database_var.container.name }}
+          image: {{ .Values.database_var.container.image }}
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: db-configmap
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: db-persist-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: db-persist-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.database_var.pvc_volume.name }}

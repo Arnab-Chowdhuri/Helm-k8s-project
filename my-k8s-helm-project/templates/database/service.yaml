@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.database_var.service.name }}
+spec:
+  selector:
+    app: {{ .Values.database_var.app }}
+  ports:
+    - port: 3306

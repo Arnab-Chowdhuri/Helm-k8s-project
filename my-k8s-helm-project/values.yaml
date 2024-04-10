@@ -1,0 +1,47 @@
+imagePullSecret: ecr-registry
+
+frontend_var:
+  deployment:
+    name: frontend-pod
+    app: fe-label
+    nodegroupKey: alpha.eksctl.io/nodegroup-name
+    nodegroupValues: worker-ng-medium
+    container:
+      name: fe-container
+      image: 905418049611.dkr.ecr.us-west-2.amazonaws.com/chatapp:fe_img_ecr
+    configmap:
+      name: fe-configmap
+  service:
+    name: fe-service
+    app: fe-label
+
+
+backend_var:
+  deployment:
+    name: backend-pod
+    app: be-label
+    nodegroupKey: alpha.eksctl.io/nodegroup-name
+    nodegroupValues: worker-ng-medium
+    container:
+      name: be-container
+      image: 905418049611.dkr.ecr.us-west-2.amazonaws.com/chatapp:be_img_ecr
+    configmap:
+      name: be-configmap
+  service:
+    name: be-service
+    app: be-label
+
+
+database_var:
+  name: database-pod
+  serviceName: db-service
+  app: db-label
+  nodegroupKey: alpha.eksctl.io/nodegroup-name
+  nodegroupValues: worker-ng-small
+  container:
+    name: db-container
+    image: 905418049611.dkr.ecr.us-west-2.amazonaws.com/chatapp:db_img_ecr
+  service:
+    name: db-service
+  pvc_volume:
+    name: db-mysql-0

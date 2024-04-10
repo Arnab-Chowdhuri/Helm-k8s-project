@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.backend_var.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.backend_var.deployment.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.backend_var.deployment.app }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ .Values.backend_var.deployment.nodegroupKey }}
+                operator: In
+                values:
+                - {{ .Values.backend_var.deployment.nodegroupValues }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      containers:
+        - name: {{ .Values.backend_var.deployment.container.name }}
+          image: {{ .Values.backend_var.deployment.container.image }}
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backend_var.deployment.configmap.name }}
+          imagePullPolicy: Always
+

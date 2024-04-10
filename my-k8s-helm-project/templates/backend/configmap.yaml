@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.backend_var.deployment.configmap.name }}
+data:
+  CHATDB: chat_db
+  CHATDBUSER: admin
+  CHATDBPASSWORD: admin
+  CHATDBHOST: {{ .Values.database_var.service.name }}
+

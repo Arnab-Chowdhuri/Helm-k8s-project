@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Values.database_var.name }}
 spec:
@@ -36,7 +36,3 @@ spec:
           volumeMounts:
             - name: db-persist-volume
               mountPath: /var/lib/mysql
-      volumes:
-        - name: db-persist-volume
-          persistentVolumeClaim:
-            claimName: {{ .Values.database_var.pvc_volume.name }}

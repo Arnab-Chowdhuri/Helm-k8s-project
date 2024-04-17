@@ -33,6 +33,3 @@ spec:
             - configMapRef:
                 name: db-configmap
           imagePullPolicy: Always
-          volumeMounts:
-            - name: db-persist-volume
-              mountPath: /var/lib/mysql
